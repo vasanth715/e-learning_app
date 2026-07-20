@@ -42,6 +42,32 @@ public class UserController {
         return ResponseEntity.ok(saved);
     }
 
+    @GetMapping
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
+
+    @PutMapping("/{id}/hold")
+    public ResponseEntity<User> toggleHoldUser(@PathVariable Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        User user = optionalUser.get();
+        user.setActive(!user.isActive());
+        User saved = userRepository.save(user);
+        return ResponseEntity.ok(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        userRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
     @Getter @Setter
     public static class ProfileUpdateRequest {
         private String name;

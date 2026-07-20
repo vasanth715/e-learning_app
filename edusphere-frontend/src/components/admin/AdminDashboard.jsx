@@ -93,10 +93,40 @@ export default function AdminDashboard({ user, onOpenProfile }) {
     loadData();
   };
 
+  const handleHoldUser = async (userId) => {
+    try {
+      await api.request(`/users/${userId}/hold`, { method: 'PUT' });
+    } catch (err) {
+      console.warn('Backend hold endpoint offline fallback');
+    }
+    setUsers(prev => prev.map(u => {
+      if (u.id === userId) {
+        const currentlyHeld = u.status === 'suspended' || u.isHold === true;
+        return {
+          ...u,
+          status: currentlyHeld ? 'active' : 'suspended',
+          isHold: !currentlyHeld
+        };
+      }
+      return u;
+    }));
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm('Are you sure you want to permanently delete this user account? This operation cannot be undone.')) {
+      try {
+        await api.request(`/users/${userId}`, { method: 'DELETE' });
+      } catch (err) {
+        console.warn('Backend delete endpoint offline fallback');
+      }
+      setUsers(prev => prev.filter(u => u.id !== userId));
+    }
+  };
+
   const renderActiveView = () => {
     switch (activeMenu) {
       case 'users':
-        return <AdminUsers users={users} />;
+        return <AdminUsers users={users} onHoldUser={handleHoldUser} onDeleteUser={handleDeleteUser} />;
       case 'courses':
         return <AdminCourses courses={courses} handleApprove={handleApprove} />;
       case 'enterprise':

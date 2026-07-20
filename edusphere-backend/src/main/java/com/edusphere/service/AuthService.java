@@ -26,6 +26,10 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid email or password.");
         }
 
+        if (!user.isActive()) {
+            throw new IllegalArgumentException("Your user account has been put on hold / suspended by Super Admin.");
+        }
+
         String role = user.getRoles().isEmpty() ? "student" : user.getRoles().iterator().next();
         return jwtUtil.generateToken(user.getEmail(), user.getId(), role);
     }

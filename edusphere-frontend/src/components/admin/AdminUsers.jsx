@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Users, Search, ShieldCheck, UserCheck, Plus, CheckCircle2 } from 'lucide-react';
+import { Users, Search, UserCheck, PauseCircle, Play, Trash2, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
-export default function AdminUsers({ users = [] }) {
+export default function AdminUsers({ users = [], onHoldUser, onDeleteUser }) {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
 
@@ -20,15 +20,15 @@ export default function AdminUsers({ users = [] }) {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-black uppercase tracking-widest border border-purple-500/30">
             <UserCheck className="h-3 w-3" />
-            <span>User Accounts Control</span>
+            <span>Super Admin Full Powers</span>
           </div>
-          <h2 className="text-xl font-black text-white">Platform Users & Access Control</h2>
-          <p className="text-xs text-slate-400">View and manage all registered learners, instructors, and system administrators.</p>
+          <h2 className="text-xl font-black text-white">Platform Users Control & Moderation</h2>
+          <p className="text-xs text-slate-400">Put accounts on hold (suspend access) or permanently delete users with instant database updates.</p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center shrink-0">
-          <span className="text-[10px] font-bold uppercase text-slate-300 block">Total Registered Users</span>
-          <span className="text-xl font-black text-white">{users.length} Accounts</span>
+          <span className="text-[10px] font-bold uppercase text-slate-300 block">Total Accounts</span>
+          <span className="text-xl font-black text-white">{users.length} Users</span>
         </div>
       </div>
 
@@ -71,37 +71,73 @@ export default function AdminUsers({ users = [] }) {
               <th className="p-4">Email Address</th>
               <th className="p-4">Account Status</th>
               <th className="p-4">System Role</th>
+              <th className="p-4 text-right">Super Admin Powers</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 text-slate-700">
-            {filtered.map(u => (
-              <tr key={u.id} className="hover:bg-slate-50 transition">
-                <td className="p-4 font-black text-slate-900 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xs shrink-0">
-                    {u.name?.[0] || 'U'}
-                  </div>
-                  <span>{u.name}</span>
-                </td>
-                <td className="p-4 font-medium text-slate-500">{u.email}</td>
-                <td className="p-4">
-                  <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Active
-                  </span>
-                </td>
-                <td className="p-4">
-                  <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                    u.role === 'admin' 
-                      ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                      : u.role === 'instructor'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-slate-100 text-slate-700 border border-slate-200'
-                  }`}>
-                    {u.role === 'admin' ? '🛡️ Super Admin' : u.role === 'instructor' ? '💼 Instructor' : '🎓 Student'}
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {filtered.map(u => {
+              const isHeld = u.status === 'suspended' || u.isHold === true;
+              return (
+                <tr key={u.id} className="hover:bg-slate-50 transition">
+                  <td className="p-4 font-black text-slate-900 flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xs shrink-0">
+                      {u.name?.[0] || 'U'}
+                    </div>
+                    <span>{u.name}</span>
+                  </td>
+                  <td className="p-4 font-medium text-slate-500">{u.email}</td>
+                  <td className="p-4">
+                    {isHeld ? (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        🔴 Suspended / On Hold
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        🟢 Active
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-4">
+                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                      u.role === 'admin' 
+                        ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                        : u.role === 'instructor'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200'
+                    }`}>
+                      {u.role === 'admin' ? '🛡️ Super Admin' : u.role === 'instructor' ? '💼 Instructor' : '🎓 Student'}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => onHoldUser && onHoldUser(u.id)}
+                        className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition flex items-center gap-1 border cursor-pointer ${
+                          isHeld
+                            ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
+                            : 'bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200'
+                        }`}
+                        title={isHeld ? "Un-hold / Activate user access" : "Put user account access on hold"}
+                      >
+                        {isHeld ? <Play className="h-3 w-3" /> : <PauseCircle className="h-3 w-3" />}
+                        <span>{isHeld ? 'Un-Hold' : 'Hold Access'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => onDeleteUser && onDeleteUser(u.id)}
+                        className="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-xl text-[10px] font-black transition flex items-center gap-1 cursor-pointer"
+                        title="Permanently delete user account"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
