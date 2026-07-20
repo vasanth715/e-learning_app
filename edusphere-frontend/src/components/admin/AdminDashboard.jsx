@@ -120,17 +120,17 @@ export default function AdminDashboard({ user, onOpenProfile }) {
   }
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] border border-slate-200 rounded-3xl overflow-hidden bg-white select-text">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-6rem)] lg:h-[calc(100vh-6rem)] lg:border lg:border-slate-800 lg:rounded-3xl overflow-hidden bg-slate-950 select-text relative shadow-2xl">
       
       {/* Sidebar Nav */}
-      <div className="w-64 bg-slate-50 border-r border-slate-200 flex flex-col flex-shrink-0 text-left">
-        <div className="p-4 border-b border-slate-200 bg-white">
+      <div className="w-full lg:w-64 bg-slate-950 border-b lg:border-b-0 lg:border-r border-slate-800/80 flex flex-col flex-shrink-0 text-left">
+        <div className="p-5 border-b border-slate-800/80 bg-slate-900/50">
           <button 
             onClick={onOpenProfile}
-            className="flex items-center gap-2 text-left group hover:opacity-90 transition cursor-pointer w-full"
+            className="flex items-center gap-3 text-left group hover:opacity-90 transition cursor-pointer w-full"
             title="Click to edit profile"
           >
-            <div className="h-9 w-9 rounded-full overflow-hidden bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xs shrink-0 border border-purple-200 group-hover:border-purple-500 shadow-sm">
+            <div className="h-10 w-10 rounded-2xl overflow-hidden bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center font-black text-sm shrink-0 border border-purple-400/40 group-hover:scale-105 transition shadow-lg shadow-purple-600/20">
               {user.avatarUrl ? (
                 <img src={user.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
               ) : (
@@ -138,33 +138,34 @@ export default function AdminDashboard({ user, onOpenProfile }) {
               )}
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-800 group-hover:text-purple-600 transition flex items-center gap-1">
+              <div className="text-xs font-black text-white group-hover:text-purple-300 transition flex items-center gap-1">
                 <span>{user.name}</span>
                 <span className="text-[10px]">⚙️</span>
               </div>
-              <div className="text-[10px] font-bold text-purple-600 uppercase tracking-wider">Super Admin Console</div>
+              <div className="text-[9px] font-black text-purple-400 uppercase tracking-widest mt-0.5">Super Admin Hub</div>
             </div>
           </button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-3 sm:p-4 space-y-1.5 overflow-y-auto">
           {[
-            { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { id: 'users', label: 'Users Management', icon: Users },
-            { id: 'courses', label: 'Course Moderation', icon: BookOpen },
+            { id: 'dashboard', label: 'Command Hub', icon: LayoutDashboard },
+            { id: 'users', label: 'Users Control', icon: Users },
+            { id: 'courses', label: 'Course Approvals', icon: BookOpen },
             { id: 'enterprise', label: 'Enterprise Seats', icon: Building2 },
             { id: 'payments', label: 'Payments Ledger', icon: CreditCard },
             { id: 'enrollments', label: 'Active Enrollments', icon: Clock }
           ].map(item => {
             const Icon = item.icon;
+            const isActive = activeMenu === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveMenu(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-xs font-bold transition duration-300 ${
-                  activeMenu === item.id
-                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/10 font-extrabold'
-                    : 'text-slate-600 hover:bg-slate-100'
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left text-xs font-bold transition-all duration-300 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 text-white shadow-lg shadow-purple-600/20 font-black'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900/80'
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -176,7 +177,7 @@ export default function AdminDashboard({ user, onOpenProfile }) {
       </div>
 
       {/* Main Panel Content */}
-      <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-6 text-left bg-slate-50/10">
+      <div className="flex-1 p-4 sm:p-6 overflow-y-auto flex flex-col gap-6 text-left bg-slate-50">
         {renderActiveView()}
       </div>
 
