@@ -47,6 +47,13 @@
             <scope>runtime</scope>
         </dependency>
         
+        <!-- MySQL Driver Connector -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
         <!-- Lombok annotations -->
         <dependency>
             <groupId>org.projectlombok</groupId>
