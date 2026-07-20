@@ -36,12 +36,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/courses/**", "/api/courses").permitAll()
-                .requestMatchers("/api/users/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/**").permitAll()
+                .anyRequest().permitAll()
             )
             // Allow iframe display for H2 console UI
             .headers(headers -> headers.frameOptions(opts -> opts.disable()))
