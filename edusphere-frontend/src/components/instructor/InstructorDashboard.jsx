@@ -155,15 +155,19 @@ export default function InstructorDashboard({ user, onNavigate, onOpenProfile })
             <X className="h-4.5 w-4.5" />
           </button>
 
-          <div className="h-24 w-24 rounded-full overflow-hidden border-2 border-purple-500/80 shadow-md shadow-purple-500/10">
-            <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
-              alt={instructorName}
-              className="h-full w-full object-cover"
-            />
+          <div className="h-20 w-20 rounded-full overflow-hidden border-2 border-purple-500/80 shadow-md shadow-purple-500/10 bg-purple-900 text-purple-200 flex items-center justify-center text-xl font-black shrink-0">
+            {user?.avatarUrl ? (
+              <img 
+                src={user.avatarUrl} 
+                alt={instructorName}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span>{user?.presetAvatar || user?.name?.substring(0, 2).toUpperCase() || 'IN'}</span>
+            )}
           </div>
           <div>
-            <div className="text-[10px] uppercase text-purple-400 font-black tracking-wider">Your channel</div>
+            <div className="text-[10px] uppercase text-purple-400 font-black tracking-wider">Teaching Studio Channel</div>
             <div className="text-xs font-extrabold text-white mt-1 uppercase tracking-wide">{instructorName}</div>
           </div>
         </div>

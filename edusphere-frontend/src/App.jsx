@@ -124,18 +124,24 @@ export default function App() {
     if (hash === '/dashboard') {
       if (!user) return <LandingPage onStartLearning={() => setIsAuthOpen(true)} onNavigate={onNavigate} />;
 
-      // Direct dashboard based on role
-      const role = user.roles?.[0] || 'student';
-      switch (role.toLowerCase()) {
-        case 'instructor':
-          return <InstructorDashboard user={user} onOpenProfile={() => setIsProfileOpen(true)} />;
-        case 'admin':
-          return <AdminDashboard user={user} onOpenProfile={() => setIsProfileOpen(true)} />;
-        case 'orgadmin':
-          return <OrgDashboard user={user} onOpenProfile={() => setIsProfileOpen(true)} />;
-        default:
-          return <StudentDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
+      // Normalize user roles array and string fallback
+      const rolesArray = Array.isArray(user.roles) ? user.roles : (user.role ? [user.role] : []);
+      const normalizedRoles = rolesArray.map(r => String(r).toLowerCase().replace('role_', ''));
+      
+      const isInstructor = normalizedRoles.includes('instructor') || user.email?.toLowerCase().includes('instructor');
+      const isAdmin = normalizedRoles.includes('admin') || user.email?.toLowerCase().includes('admin');
+      const isOrgAdmin = normalizedRoles.includes('orgadmin') || user.email?.toLowerCase().includes('orgadmin');
+
+      if (isInstructor) {
+        return <InstructorDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
       }
+      if (isAdmin) {
+        return <AdminDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
+      }
+      if (isOrgAdmin) {
+        return <OrgDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
+      }
+      return <StudentDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
     }
 
     // Default fallback

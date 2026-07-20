@@ -78,7 +78,9 @@ export default function Navbar({
                 }`}
               >
                 <LayoutDashboard className="h-3.5 w-3.5" />
-                My Dashboard
+                {(Array.isArray(user.roles) && user.roles.some(r => r.toLowerCase().includes('instructor'))) || user.email?.toLowerCase().includes('instructor')
+                  ? 'Instructor Studio' 
+                  : 'My Dashboard'}
               </button>
             )}
           </nav>
