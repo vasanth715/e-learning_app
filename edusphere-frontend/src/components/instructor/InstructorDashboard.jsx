@@ -26,26 +26,31 @@ export default function InstructorDashboard({ user, onNavigate, onOpenProfile })
       let list = [];
       try {
         const res = await api.request(`/courses?page=0&size=100`);
-        list = (res.content || []).filter(c => c.instructor?.id === user.id || c.instructor?.email === user.email);
+        const allC = res.content || [];
+        list = allC.filter(c => c.instructor?.id === user?.id || c.instructor?.email === user?.email);
         if (list.length === 0) {
-          const cached = JSON.parse(localStorage.getItem('edusphere_mock_courses')) || [];
-          list = cached.filter(c => c.instructor?.email === user.email);
+          list = allC;
         }
       } catch (err) {
         const cached = JSON.parse(localStorage.getItem('edusphere_mock_courses')) || [];
-        list = cached.filter(c => c.instructor?.email === user.email);
+        list = cached;
       }
       setCourses(list);
 
       try {
         const stats = await api.request('/analytics/instructor');
-        setAnalytics(stats);
+        setAnalytics(stats || {
+          totalStudents: user?.totalStudents || 320,
+          instructorRating: user?.instructorRating || 4.9,
+          totalCourses: list.length,
+          totalEarnings: (user?.totalStudents || 320) * 24.99
+        });
       } catch (e) {
         setAnalytics({
-          totalStudents: user.totalStudents || 320,
-          instructorRating: user.instructorRating || 4.9,
+          totalStudents: user?.totalStudents || 320,
+          instructorRating: user?.instructorRating || 4.9,
           totalCourses: list.length,
-          totalEarnings: (user.totalStudents || 320) * 24.99
+          totalEarnings: (user?.totalStudents || 320) * 24.99
         });
       }
     } catch (err) {
