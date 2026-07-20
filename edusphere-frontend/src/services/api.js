@@ -182,6 +182,18 @@ export const api = {
       return { content: all };
     }
 
+    // Users fallback for admin/analytics
+    if (path.startsWith('/users') && method === 'GET') {
+      const seedUsers = [
+        { id: 1, name: 'Diya Khere', email: 'diya@example.com', role: 'student', active: true },
+        { id: 2, name: 'Rahul Sharma', email: 'rahul@example.com', role: 'student', active: true },
+        { id: 3, name: 'Sneha Patil', email: 'sneha@example.com', role: 'student', active: true },
+        { id: 4, name: 'Amit Verma', email: 'instructor@edusphere.com', role: 'instructor', active: true },
+        { id: 5, name: 'Ed Admin', email: 'admin@edusphere.com', role: 'admin', active: true }
+      ];
+      return seedUsers;
+    }
+
     // Enrollments
     if (path.startsWith('/enrollments/my')) {
       const stored = localStorage.getItem('edusphere_mock_enrolls') || '[]';
