@@ -12,14 +12,20 @@
   /* Global Fonts Parameters configuration */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Font Sizes configuration */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 18px;
-  --text-xl: 20px;
-  --text-2xl: 24px;
-  --text-3xl: 30px;
+  /* Font Sizes configuration (+10% Overall Scaling) */
+  --text-xs: 13.2px;
+  --text-sm: 15.4px;
+  --text-base: 17.6px;
+  --text-lg: 19.8px;
+  --text-xl: 22px;
+  --text-2xl: 26.4px;
+  --text-3xl: 33px;
+  --text-4xl: 39.6px;
+  --text-5xl: 52.8px;
+}
+
+html {
+  font-size: 110%;
 }
 
 body {
