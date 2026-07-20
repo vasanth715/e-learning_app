@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
-import { LayoutDashboard, Users, BookOpen, Clock, CreditCard } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Clock, CreditCard, Building2 } from 'lucide-react';
 
 import AdminHome from './AdminHome';
 import AdminUsers from './AdminUsers';
 import AdminCourses from './AdminCourses';
 import AdminPayments from './AdminPayments';
 import AdminEnrollments from './AdminEnrollments';
+import AdminEnterprise from './AdminEnterprise';
 
 export default function AdminDashboard({ user, onOpenProfile }) {
   const [activeMenu, setActiveMenu] = useState('dashboard'); // dashboard, users, courses, payments, enrollments
@@ -98,6 +99,8 @@ export default function AdminDashboard({ user, onOpenProfile }) {
         return <AdminUsers users={users} />;
       case 'courses':
         return <AdminCourses courses={courses} handleApprove={handleApprove} />;
+      case 'enterprise':
+        return <AdminEnterprise />;
       case 'payments':
         return <AdminPayments orders={orders} />;
       case 'enrollments':
@@ -127,7 +130,7 @@ export default function AdminDashboard({ user, onOpenProfile }) {
             className="flex items-center gap-2 text-left group hover:opacity-90 transition cursor-pointer w-full"
             title="Click to edit profile"
           >
-            <div className="h-9 w-9 rounded-full overflow-hidden bg-red-100 text-red-700 flex items-center justify-center font-black text-xs shrink-0 border border-red-200 group-hover:border-red-500 shadow-sm">
+            <div className="h-9 w-9 rounded-full overflow-hidden bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xs shrink-0 border border-purple-200 group-hover:border-purple-500 shadow-sm">
               {user.avatarUrl ? (
                 <img src={user.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
               ) : (
@@ -135,20 +138,21 @@ export default function AdminDashboard({ user, onOpenProfile }) {
               )}
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-800 group-hover:text-red-600 transition flex items-center gap-1">
+              <div className="text-xs font-bold text-slate-800 group-hover:text-purple-600 transition flex items-center gap-1">
                 <span>{user.name}</span>
                 <span className="text-[10px]">⚙️</span>
               </div>
-              <div className="text-[10px] text-slate-400">Admin Console • Edit</div>
+              <div className="text-[10px] font-bold text-purple-600 uppercase tracking-wider">Super Admin Console</div>
             </div>
           </button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {[
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'users', label: 'Users Management', icon: Users },
             { id: 'courses', label: 'Course Moderation', icon: BookOpen },
+            { id: 'enterprise', label: 'Enterprise Seats', icon: Building2 },
             { id: 'payments', label: 'Payments Ledger', icon: CreditCard },
             { id: 'enrollments', label: 'Active Enrollments', icon: Clock }
           ].map(item => {
@@ -159,7 +163,7 @@ export default function AdminDashboard({ user, onOpenProfile }) {
                 onClick={() => setActiveMenu(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-xs font-bold transition duration-300 ${
                   activeMenu === item.id
-                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/10'
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/10 font-extrabold'
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >

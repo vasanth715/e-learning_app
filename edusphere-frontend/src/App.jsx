@@ -129,17 +129,13 @@ export default function App() {
       const normalizedRoles = rolesArray.map(r => String(r).toLowerCase().replace('role_', ''));
       
       const isInstructor = normalizedRoles.includes('instructor') || user.email?.toLowerCase().includes('instructor');
-      const isAdmin = normalizedRoles.includes('admin') || user.email?.toLowerCase().includes('admin');
-      const isOrgAdmin = normalizedRoles.includes('orgadmin') || user.email?.toLowerCase().includes('orgadmin');
+      const isAdmin = normalizedRoles.includes('admin') || normalizedRoles.includes('orgadmin') || user.email?.toLowerCase().includes('admin');
 
       if (isInstructor) {
         return <InstructorDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
       }
       if (isAdmin) {
         return <AdminDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
-      }
-      if (isOrgAdmin) {
-        return <OrgDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
       }
       return <StudentDashboard user={user} onNavigate={onNavigate} onOpenProfile={() => setIsProfileOpen(true)} />;
     }

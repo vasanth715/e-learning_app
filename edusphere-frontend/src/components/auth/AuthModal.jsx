@@ -151,11 +151,10 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
           {isRegister && (
             <div className="space-y-1">
               <label className="text-xs font-bold text-slate-500 uppercase">Select Role</label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: 'student', label: 'Student' },
                   { id: 'instructor', label: 'Instructor' },
-                  { id: 'orgadmin', label: 'Org Admin' },
                   { id: 'admin', label: 'System Admin' }
                 ].map(r => (
                   <button
@@ -164,7 +163,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                     onClick={() => setRole(r.id)}
                     className={`p-2.5 rounded-xl border text-xs font-semibold transition ${
                       role === r.id
-                        ? 'bg-purple-50 border-purple-500 text-purple-700'
+                        ? 'bg-purple-50 border-purple-500 text-purple-700 font-bold'
                         : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
                     }`}
                   >
@@ -189,34 +188,27 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               <div className="text-[10px] font-bold text-slate-400 uppercase text-center mb-2 tracking-wider">
                 Quick Demo Credentials Logins
               </div>
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-3 gap-1.5">
                 <button
                   type="button"
                   onClick={() => handleQuickLogin('student@edusphere.com', 'student123')}
-                  className="px-2 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-600 font-semibold"
+                  className="px-2 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-[10px] text-slate-700 font-bold"
                 >
                   🎓 Student
                 </button>
                 <button
                   type="button"
                   onClick={() => handleQuickLogin('instructor@edusphere.com', 'instructor123')}
-                  className="px-2 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-600 font-semibold"
+                  className="px-2 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-700 font-bold"
                 >
                   💼 Instructor
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickLogin('orgadmin@edusphere.com', 'orgadmin123')}
-                  className="px-2 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-600 font-semibold"
-                >
-                  🏢 Org Admin
-                </button>
-                <button
-                  type="button"
                   onClick={() => handleQuickLogin('admin@edusphere.com', 'admin123')}
-                  className="px-2 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-600 font-semibold"
+                  className="px-2 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-[10px] text-slate-700 font-bold"
                 >
-                  🛡️ System Admin
+                  🛡️ Admin
                 </button>
               </div>
             </div>
